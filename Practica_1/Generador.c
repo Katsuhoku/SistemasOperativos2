@@ -61,11 +61,11 @@ int main (int argc, char *argv[]) {
 	srand ( time(NULL) + 52 );
 
 	for (int i = 0; i < cantidadProcesos; i++){
-		pid          = rand () % (MaxPid - MinPid + 1) + MinPid;
+		//pid        = rand () % (MaxPid - MinPid + 1) + MinPid;
 		tiempoEspera = rand () % (MaxTimeEjecu - MinTimeEjecu + 1) + MinTimeEjecu;
 		prioridad    = rand () % (MaxPriority - MinPriority + 1) + MinPriority;
 
-		fprintf(fichero, "%d", pid);
+		fprintf(fichero, "%d", i+1);
 		fprintf(fichero, " ");
 		fprintf(fichero, "%d", tiempoEspera);
 		fprintf(fichero, " ");
