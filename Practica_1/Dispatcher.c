@@ -13,6 +13,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <unistd.h>
 #define QUANTUM 5
 
@@ -57,7 +58,7 @@ int main (int argc, char *argv[]) {
         }
         if(exec != NULL) {
             if(cputime == 0) {
-                finish(head, exec);
+                finish(&head, exec);
                 add(finished, exec);
 
                 if(head != NULL) {
