@@ -15,22 +15,10 @@
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
+#include <sys/shm.h>
+#include <unistd.h>
+#include "Proceso.h"
 #define QUANTUM 5
-
-// Estructura de información de un proceso
-typedef struct {
-    int pid;
-    int priority;
-    int cputime;
-    int waittime;
-    int totaltime;
-} proc;
-
-// Lista ligada de procesos
-typedef struct node {
-    proc process;
-    struct node* next;
-} procnode;
 
 int tickets(procnode* head);
 procnode* lottery(procnode* head);
@@ -38,62 +26,47 @@ void add(procnode* head, procnode* new);
 void finish(procnode** head, procnode* comp);
 
 int main (int argc, char *argv[]) {
-    int systime; // Tiempo total de ejecución del despachador
-    int pickSleep; // Tiempo de espera para buscar nuevos procesos en el archivo
-    procnode* head = NULL; // Lista de procesos listos
-    procnode* finished = NULL; // Lista de procesos finalizados
-    procnode* exec = NULL; // Proceso en ejecución
-    int Q = 1;
+  key_t key;
+  int id_mem;
+  proc* mem = NULL;
+  int i, j;
 
-    time_t t;
+  key = ftok(MEM_FILE, MEM_HAND);
+  if (key == -1) {
+    printf("Cannot get key");
+    exit(EXIT_FAILURE);
+  }
 
-    srand((unsigned) time(&t));
+  id_mem = shmget(key, sizeof(proc)*3, 0777 | IPC_CREAT);
+  if (id_mem == -1) {
+    printf("Cannot get ID");
+    return(0);
+  }
 
-    while(1) {
-        if(pickSleep == 0) {
-            /*
-            Ingreso de procesos por lotes
-            Apertura del archivo y carga de procesos en lista ligada
-            */
-        }
-        if(exec != NULL) {
-            if(cputime == 0) {
-                finish(&head, exec);
-                add(finished, exec);
+  mem = (proc*) shmat(id_mem, (char*) 0, 0);
+  if (mem == NULL) {
+    printf("Cannot get memory");
+    return(0);
+  }
 
-                if(head != NULL) {
-                    exec = lottery(head);
+  sleep(5);
 
-                    (exec->process).cputime--;
-                    Q++;
-                    systime++;
-                }
-            }
-            else if (Q == QUANTUM) {
-                exec = lottery(head);
+  // mem es ahora un arreglo de tipo "proc", compartido con cualquier
+  // proceso que acceda a él
+  for (i = 0; i < 3; i++) {
+    printf("\nPID :\t%d", mem[i].pid);
+    printf("\nPRIORITY :\t%d", mem[i].priority);
+    printf("\nCPUTIME :\t%d", mem[i].cputime);
+    printf("\nWAITTIME :\t%d", mem[i].waittime);
+    printf("\nTOTALTIME :\t%d\n", mem[i].totaltime);
+  }
 
-                (exec->process).cputime--;
-                Q++;
-                systime++;
-            }
-        } else {
-            if(head != NULL) {
-                exec = lottery(head);
+  shmdt((char *) mem);
+  shmctl(id_mem, IPC_RMID, (struct shmid_ds *)NULL);
 
-                (exec->process).cputime--;
-                Q++;
-                systime++;
-            }
-        }
-
-        sleep(1);
-    }
-
-    /*
-    Escribir en el archivo la información en la lista de finalizados
-    */
-    return 0;
+  return 0;
 }
+
 
 // Calcula el total de tickets
 int tickets(procnode* head) {
