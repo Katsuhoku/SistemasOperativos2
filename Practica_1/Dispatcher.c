@@ -62,7 +62,6 @@ int main() {
     while (i < MAXPROCESS && mem[i].pid > 0) {
       add(&head, node(mem[i])); // Genera nodo y lo agrega
       mem[i].pid = -1;
-      printf("\n%d", i);
       i++;
     }
 
@@ -107,7 +106,6 @@ int main() {
       }
     }
 
-    printf("\n転回");
     sleep(1);
   }
 
@@ -149,14 +147,16 @@ procnode* lottery(procnode* head) {
 procnode* node(proc newproc) {
   procnode* new;
 
-  if ((new = malloc(sizeof(procnode))) == NULL) return NULL;
+  if ((new = malloc(sizeof(procnode))) != NULL) {
+    new->process.pid = newproc.pid;
+    new->process.priority = newproc.priority;
+    new->process.cputime = newproc.cputime;
+    new->process.waittime = newproc.waittime;
+    new->process.totaltime = newproc.totaltime;
+    new->next = NULL;
+  }
 
-  new->process.pid = newproc.pid;
-  new->process.priority = newproc.priority;
-  new->process.cputime = newproc.cputime;
-  new->process.waittime = newproc.waittime;
-  new->process.totaltime = newproc.totaltime;
-  new->next = NULL;
+  return new;
 }
 
 // Agrega un proceso (o una lista de procesos) a la lista
