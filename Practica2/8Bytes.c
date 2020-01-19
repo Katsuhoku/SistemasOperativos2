@@ -11,6 +11,7 @@ int main( int argc, char **argv ) {
 
     printf("Ingrese un numero\n->");
     scanf("%d", &numero);
+    printf("\n");
 
     // Extracción de bytes
     for (int i = 0; i < 4; i++) {
@@ -18,7 +19,6 @@ int main( int argc, char **argv ) {
         numero >>= 8;
     }
 
-    // Impresión de resultados
     printf("Los bytes son: ");
     for (int i = 0; i < 4; i++) {
         printByte(aux[i]);
