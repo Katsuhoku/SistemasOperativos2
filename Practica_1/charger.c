@@ -11,10 +11,10 @@
 
 #define MAXLENGTH 50 //Longitud maxima de las cadenas
 
-#define MINTIME 3 //Minimo de tiempo dormido
-#define MAXTIME 10 //Maximo de tiempo dormido
+#define MINTIME 1 //Minimo de tiempo dormido
+#define MAXTIME 1 //Maximo de tiempo dormido
 
-#define FILENAME "procfile.txt"
+#define FILENAME "ProcesosGenerados.txt"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -38,24 +38,23 @@ int main() {
     time_t t;
     srand((unsigned) time(&t));
 
+    int id_mem;
     proc* mem = NULL;
 
     // Genera / Obtiene la memoria compartida
-    switch (getshmem(&mem)) {
-      case 1:
-        printf("\nError: Cannot get key");
+    switch ((id_mem = getshmem(&mem))) {
+      case -1:
+        fprintf(stderr, "\nError: Cannot get key");
         exit(0);
         break;
-      case 2:
-        printf("\nCannot get ID");
+      case -2:
+        fprintf(stderr, "\nCannot get ID");
         exit(0);
         break;
-      case 3:
-        printf("\nCannot get shared memory");
+      case -3:
+        fprintf(stderr, "\nCannot get shared memory");
         exit(0);
         break;
-      default:
-        printf("\nShared memory correctly generated/obtained");
     }
 
 
@@ -68,6 +67,10 @@ int main() {
         //usleep(1000000);
         usleep((rand() % (MAXTIME - MINTIME + 1) + MINTIME) * 1000000);
     }
+
+    /* Indica que el cargador ha terminado */
+    mem[0].pid = -2;
+    outmem(id_mem, (char *) mem);
 
     return 0;
 }
@@ -109,7 +112,7 @@ void readProcesses(procnode** head, procnode** last){
     proc process;
 
     if ((file = fopen(FILENAME, "r")) == NULL ) {
-        printf("Error al abrir el archivo");
+        fprintf(stderr, "Error al abrir el archivo");
         exit(EXIT_FAILURE);
     }
 
@@ -129,7 +132,7 @@ void sendProcesses(procnode** head, proc** mem){
     if ((*head) == NULL) return;
     int cantProcesses = rand() % (MAXPROCESS - MINPROCESS + 1) + MINPROCESS;
     int j = cantProcesses;
-    printf("Valor de j: %d \n", j);
+    //printf("Valor de j: %d \n", j);
 
     for (i = 0; j > 0 && (*head) != NULL ; i++, j--){
         //Agregar los procesos a memoria compartida
@@ -150,11 +153,11 @@ void sendProcesses(procnode** head, proc** mem){
 void listar(procnode *head) {
   procnode* temp;
   if (head == NULL) {
-    printf("\nLista Vacía\n");
+    //printf("\nLista Vacía\n");
     return;
   }
 
-  printf("\nDatos Almacenados:\n");
-  for (temp = head; temp != NULL; temp = temp->next)
-    printf("PID: %d EXE: %d, Priority: %d\n", temp->process.pid, temp->process.cputime, temp->process.priority);
+  //printf("\nDatos Almacenados:\n");
+  for (temp = head; temp != NULL; temp = temp->next);
+    //printf("PID: %d EXE: %d, Priority: %d\n", temp->process.pid, temp->process.cputime, temp->process.priority);
 }

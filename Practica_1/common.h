@@ -23,5 +23,7 @@ typedef struct node {
 } procnode;
 
 int getshmem(proc** mem);
+void outmem(int id_mem, char* mem);
+void clsmem(int id_mem);
 
 #endif
