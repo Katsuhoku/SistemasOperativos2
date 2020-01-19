@@ -5,7 +5,7 @@ Programas creados de laboratorio de Sistemas Operativos 2
 
 Lista de programas creados en el lenguaje **C**, **Python** y **Java**  
 
-Con propósito de conocer y manejar manejo de memoria, manejo de archivos, sistemas embebidos, sistemas aprueba de fallos.
+Con propósito de estudiar y manejar manejo de memoria, manejo de archivos, sistemas embebidos, sistemas aprueba de fallos.
 
 
 --------------
