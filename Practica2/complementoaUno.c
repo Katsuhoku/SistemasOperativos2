@@ -24,9 +24,8 @@ int main( int argc, char **argv ){
 }
 
 void printByte(char byte){
-    int mascara = 0x80;
     for (int i = 0; i < 8; i++) {
-        printf("%d", (byte & mascara) >> 7);
+        printf("%d", (byte & 0x80) >> 7);
         byte <<= 1;
     }
 }
