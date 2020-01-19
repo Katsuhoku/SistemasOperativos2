@@ -20,9 +20,9 @@ Con propósito de estudiar y manejar manejo de memoria, manejo de archivos, sist
 
 # Programas de Laboratorio
 
-#### Practica 1: [Simulador despachador de procesos](https://github.com/Fatake/SistemasOperativos2/tree/master/Practica_1)
+#### Practica 1: [Simulador despachador de procesos](https://github.com/Fatake/SistemasOperativos2/tree/master/Practica1)
 
-#### Practica 2:
+#### Practica 2: [Complemento a 1 sin operador](https://github.com/Fatake/SistemasOperativos2/tree/master/Practica2)
 
 
 --------------
