@@ -19,7 +19,7 @@ int main( int argc, char **argv ){
     printf("\nNumero en Bytes:\n");
 
     complemento = numero ^ MASCARAXOR;//Complemento a 1
-    imprimirEntero(complemento);
+    printfInt(complemento);
     return 0;
 }
 
